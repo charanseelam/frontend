@@ -43,7 +43,9 @@ export default function Settings({ user }) {
           <div className="settings-card">
             <h3>Security</h3>
             <p className="settings-description">Protect your account with a strong password and active session monitoring.</p>
-            <button type="button" className="button-primary">Update Password</button>
+            <Link to="/update-password" className="button-primary" style={{ display: 'inline-flex', justifyContent: 'center', textDecoration: 'none' }}>
+              Update Password
+            </Link>
           </div>
         </div>
       </div>

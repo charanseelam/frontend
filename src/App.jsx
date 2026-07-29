@@ -11,6 +11,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
+import UpdatePassword from "./pages/UpdatePassword";
 import Dashboard from "./pages/dashboard";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
@@ -82,6 +83,7 @@ function App() {
         <Route path="/dashboard" element={user ? <Dashboard user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/profile" element={user ? <Profile user={user} onLogout={handleLogout} /> : <Navigate to="/login" />} />
         <Route path="/settings" element={user ? <Settings user={user} /> : <Navigate to="/login" />} />
+        <Route path="/update-password" element={user ? <UpdatePassword user={user} /> : <Navigate to="/login" />} />
         <Route path="/markets" element={user ? <Markets user={user} /> : <Navigate to="/login" />} />
         <Route path="/portfolio" element={user ? <Portfolio user={user} /> : <Navigate to="/login" />} />
         <Route path="/wallet" element={user ? <Wallet user={user} /> : <Navigate to="/login" />} />
