@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://trading-n450.onrender.com/api/:path*"
+      "destination": "https://trading-g4tl.onrender.com/api/:path*"
     }
   ]
 }

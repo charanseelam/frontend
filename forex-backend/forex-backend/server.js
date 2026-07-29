@@ -4,7 +4,23 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
-app.use(cors());
+
+// Configure CORS: allow specific origins via env or allow all by default
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s => s.trim()).filter(Boolean);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow non-browser requests or same-origin
+    if (allowedOrigins.length === 0 || allowedOrigins.indexOf('*') !== -1) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+    return callback(new Error('CORS_NOT_ALLOWED'));
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // enable preflight for all routes
 app.use(express.json());
 
 // Initialize SQLite database file

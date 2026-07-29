@@ -11,8 +11,8 @@ export default function App() {
         setLoading(true);
         // Fetch both rates and users from your backend API
         const [ratesRes, usersRes] = await Promise.all([
-          fetch('http://localhost:5000/api/rates'),
-          fetch('http://localhost:5000/api/users')
+          fetch('https://trading-g4tl.onrender.com/api/register'),
+          fetch('https://trading-g4tl.onrender.com/api/register')
         ]);
 
         const ratesData = await ratesRes.json();
