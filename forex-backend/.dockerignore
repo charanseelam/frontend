@@ -1,7 +1,8 @@
 node_modules
 npm-debug.log
-.env
-forex.db
-.DS_Store
+Dockerfile
+.dockerignore
 .git
 .gitignore
+.env
+*.log
