@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { apiFetch } from '../lib/api';
 
 const chartData = [20, 35, 28, 42, 38, 54, 50, 66, 78, 74, 88, 92];
 
@@ -33,7 +34,7 @@ export default function Dashboard({ user, onLogout }) {
   ]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/rates')
+    apiFetch('/rates')
       .then((res) => res.json())
       .then((data) => setRates(data))
       .catch((err) => console.error('Failed to load database rates:', err));

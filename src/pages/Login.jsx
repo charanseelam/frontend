@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../index.css';
+import { apiFetch } from '../lib/api';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ export default function Login({ onLogin }) {
     setLoading(true);
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/login', {
+      const res = await apiFetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
