@@ -13,7 +13,7 @@ npm run dev
 
 2. Vercel (frontend) — making the frontend reach your deployed backend
 - In your Vercel dashboard, open the project settings → Environment Variables.
-- Add `VITE_API_URL` with the value `https://your-backend.example/api` for Production (and Preview if needed).
+- Add `VITE_API_URL` with the value `https://backend-production-5d72.up.railway.app/api` for Production (and Preview if needed).
 - Redeploy the frontend.
 
 3. Notes

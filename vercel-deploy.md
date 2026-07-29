@@ -14,10 +14,10 @@ vercel login
 ```bash
 cd forex-ui
 vercel env add VITE_API_URL production
-# paste your backend URL (https://your-backend.example) when prompted
+# paste your backend URL (https://backend-production-5d72.up.railway.app) when prompted
 ```
 
-- Or set it in the Vercel Dashboard: Project → Settings → Environment Variables → Add `VITE_API_URL` with your backend URL.
+- Or set it in the Vercel Dashboard: Project → Settings → Environment Variables → Add `VITE_API_URL` with your backend URL (https://backend-production-5d72.up.railway.app/api).
 
 3) Deploy
 
@@ -28,8 +28,7 @@ vercel --prod
 ```
 
 4) Optional: Proxy `/api` to backend via `vercel.json`
-- A `vercel.json` file is included that rewrites `/api/*` to the placeholder backend URL. Replace `https://your-backend.example` with your real backend URL and commit. This lets the frontend make same-origin calls to `/api/*` and Vercel will forward them to your backend.
+-- Note: It's simpler and more reliable to set `VITE_API_URL` in Vercel environment variables to `https://backend-production-5d72.up.railway.app/api` and not attempt to proxy requests from `vercel.json`.
 
 Notes
-- If you use the `vercel.json` rewrite, keep `VITE_API_URL` unset so the client uses `/api` fallback, or set `VITE_API_URL` to the public backend URL and remove the rewrite.
-- Ensure your backend is HTTPS and publicly reachable.
+- Ensure your backend is HTTPS and publicly reachable at `https://backend-production-5d72.up.railway.app`.

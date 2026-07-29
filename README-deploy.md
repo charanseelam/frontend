@@ -42,7 +42,7 @@ cp .env.example .env
 2. Open `.env` and set `VITE_API_URL` to your backend API base URL, for example:
 
 ```env
-VITE_API_URL=https://your-backend.example/api
+VITE_API_URL=https://backend-production-5d72.up.railway.app/api
 ```
 
 3. Run the frontend locally:
@@ -56,8 +56,8 @@ npm run dev
 
 ### Vercel
 
-- Create a Vercel project from the `forex-ui` repo.
-- Set `VITE_API_URL` in Project Settings → Environment Variables.
+-- Create a Vercel project from the `forex-ui` repo.
+-- Set `VITE_API_URL` in Project Settings → Environment Variables to `https://backend-production-5d72.up.railway.app/api`.
 - Use `npm run build` as the build command and `dist` as the output folder.
 
 > Note: The app will use `VITE_API_URL` for API requests in production. If `VITE_API_URL` is unset in production, it falls back to `/api` only when the hostname is not `localhost`.
