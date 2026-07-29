@@ -13,34 +13,38 @@ export default function Navbar({ user, onLogout }) {
       </Link>
 
       <ul className="nav-links">
-        <li><Link to="/">Home</Link></li>
+        {!user && (
+          <>
+            <li><Link to="/">Home</Link></li>
 
-        <li className="dropdown">
-          <span className="dropdown-title">Platforms ▾</span>
-          <div className="dropdown-menu">
-            <Link to="/platforms#desktop">Desktop</Link>
-            <Link to="/platforms#mobile">Mobile</Link>
-          </div>
-        </li>
+            <li className="dropdown">
+              <span className="dropdown-title">Platforms ▾</span>
+              <div className="dropdown-menu">
+                <Link to="/platforms#desktop">Desktop</Link>
+                <Link to="/platforms#mobile">Mobile</Link>
+              </div>
+            </li>
 
-        <li className="dropdown">
-          <span className="dropdown-title">Trading ▾</span>
-          <div className="dropdown-menu">
-            <Link to="/trading#fees">Fees</Link>
-            <Link to="/trading#ipo">IPO</Link>
-            <Link to="/trading#market-data">Market Data</Link>
-          </div>
-        </li>
+            <li className="dropdown">
+              <span className="dropdown-title">Trading ▾</span>
+              <div className="dropdown-menu">
+                <Link to="/trading#fees">Fees</Link>
+                <Link to="/trading#ipo">IPO</Link>
+                <Link to="/trading#market-data">Market Data</Link>
+              </div>
+            </li>
 
-        <li className="dropdown">
-          <span className="dropdown-title">Funding ▾</span>
-          <div className="dropdown-menu">
-            <Link to="/funding#deposit">Deposit</Link>
-            <Link to="/register">Register</Link>
-          </div>
-        </li>
+            <li className="dropdown">
+              <span className="dropdown-title">Funding ▾</span>
+              <div className="dropdown-menu">
+                <Link to="/funding#deposit">Deposit</Link>
+                <Link to="/register">Register</Link>
+              </div>
+            </li>
 
-        <li><Link to="/about">About</Link></li>
+            <li><Link to="/about">About</Link></li>
+          </>
+        )}
       </ul>
 
       <div className="actions">

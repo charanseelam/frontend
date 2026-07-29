@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
+import "./App.css";
 
 import Home from "./pages/home";
 import Platforms from "./pages/Platforms";
@@ -70,11 +71,11 @@ function App() {
     <BrowserRouter>
       <Navbar user={user} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Home user={user} />} />
-        <Route path="/platforms" element={<Platforms />} />
-        <Route path="/trading" element={<Trading />} />
-        <Route path="/funding" element={<Funding />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Home user={user} />} />
+        <Route path="/platforms" element={user ? <Navigate to="/dashboard" /> : <Platforms />} />
+        <Route path="/trading" element={user ? <Navigate to="/dashboard" /> : <Trading />} />
+        <Route path="/funding" element={user ? <Navigate to="/dashboard" /> : <Funding />} />
+        <Route path="/about" element={user ? <Navigate to="/dashboard" /> : <About />} />
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />} />
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         <Route path="/forgot-password" element={user ? <Navigate to="/dashboard" /> : <ForgotPassword />} />

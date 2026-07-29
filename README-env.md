@@ -6,14 +6,14 @@ Frontend environment setup
 ```bash
 cd forex-ui
 cp .env.example .env
-# edit .env and set VITE_API_URL=https://your-backend.example
+# edit .env and set VITE_API_URL=https://your-backend.example/api
 npm install
 npm run dev
 ```
 
 2. Vercel (frontend) — making the frontend reach your deployed backend
 - In your Vercel dashboard, open the project settings → Environment Variables.
-- Add `VITE_API_URL` with the value `https://your-backend.example` for Production (and Preview if needed).
+- Add `VITE_API_URL` with the value `https://your-backend.example/api` for Production (and Preview if needed).
 - Redeploy the frontend.
 
 3. Notes
