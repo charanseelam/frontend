@@ -3,18 +3,47 @@ import { Link, useNavigate } from 'react-router-dom';
 import { apiFetch } from '../lib/api';
 import './Auth.css';
 
+const demoCredentials = {
+  email: 'demo@hexa.com',
+  password: 'demo1234'
+};
+
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleDemoLogin = () => {
+    setEmail(demoCredentials.email);
+    setPassword(demoCredentials.password);
+    setError('');
+    setInfo('Demo credentials filled. Click Sign In to continue.');
+  };
+
+  const handleDirectDemoLogin = () => {
+    const demoUser = {
+      id: 0,
+      username: 'Demo Trader',
+      email: demoCredentials.email,
+      isDemo: true
+    };
+
+    if (onLogin) {
+      onLogin(demoUser, false);
+    }
+
+    navigate('/dashboard');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setInfo('');
     setIsLoading(true);
 
     try {
@@ -81,9 +110,10 @@ export default function Login({ onLogin }) {
           </div>
 
           {error && <div className="error-box">{error}</div>}
+          {info && <div className="success-box">{info}</div>}
 
-          <button type="button" className="demo-btn">
-            Use Demo Account
+          <button type="button" className="demo-btn" onClick={handleDirectDemoLogin} style={{ background: '#0ea5e9', marginBottom: '1rem' }}>
+            Login With Demo Account
           </button>
 
           <form className="auth-form" onSubmit={handleSubmit}>

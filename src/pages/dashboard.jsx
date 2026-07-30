@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../lib/api';
 
 const chartData = [20, 35, 28, 42, 38, 54, 50, 66, 78, 74, 88, 92];
 
 export default function Dashboard({ user, onLogout }) {
+  const navigate = useNavigate();
   const [rates, setRates] = useState([]);
   const [theme, setTheme] = useState('dark');
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 900 : false);
   const [tradeModal, setTradeModal] = useState({ open: false, type: 'Buy' });
   const [tradeAmount, setTradeAmount] = useState('1000');
   const [orderMessage, setOrderMessage] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [portfolio, setPortfolio] = useState([
     { symbol: 'EUR/USD', side: 'Long', size: '1.25 lots', entry: '1.0820', pnl: '+$240.00' },
     { symbol: 'Gold', side: 'Long', size: '0.50 lots', entry: '$1,935', pnl: '+$85.00' },
@@ -66,7 +70,8 @@ export default function Dashboard({ user, onLogout }) {
     background: isDark ? 'linear-gradient(135deg, #060816 0%, #0f172a 100%)' : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
     color: isDark ? '#f8fafc' : '#0f172a',
     minHeight: '80vh',
-    padding: isMobile ? '0.75rem' : '1.25rem'
+    padding: isMobile ? '0.75rem' : '1.25rem',
+    position: 'relative'
   };
 
   const textMuted = isDark ? '#94a3b8' : '#475569';
@@ -98,12 +103,53 @@ export default function Dashboard({ user, onLogout }) {
   return (
     <div style={shellStyle}>
       <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <aside style={{ display: isMobile ? 'none' : 'block', width: '230px', background: isDark ? 'rgba(2, 6, 23, 0.8)' : 'rgba(255, 255, 255, 0.9)', borderRadius: '18px', border: `1px solid ${borderColor}`, padding: '1rem', boxShadow: '0 10px 30px rgba(2, 6, 23, 0.12)' }}>
-          <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#00d2ff', marginBottom: '1.2rem' }}>HEXA</div>
+        <aside style={{ display: isMobile ? (sidebarOpen ? 'block' : 'none') : 'block', width: isMobile ? '100%' : '230px', background: isDark ? 'rgba(2, 6, 23, 0.8)' : 'rgba(255, 255, 255, 0.9)', borderRadius: '18px', border: `1px solid ${borderColor}`, padding: '1rem', boxShadow: '0 10px 30px rgba(2, 6, 23, 0.12)', position: isMobile ? 'relative' : 'static', zIndex: isMobile ? 10 : 'auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#00d2ff' }}>HEXA</div>
+            {isMobile && (
+              <button
+                type="button"
+                onClick={() => setSidebarOpen(false)}
+                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.9rem', padding: 0 }}
+              >
+                Close
+              </button>
+            )}
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            {['Dashboard', 'Markets', 'Portfolio', 'Settings'].map((item) => (
-              <div key={item} style={{ padding: '0.7rem 0.8rem', borderRadius: '10px', background: item === 'Dashboard' ? (isDark ? 'rgba(0,210,255,0.12)' : 'rgba(0,210,255,0.1)') : 'transparent', color: item === 'Dashboard' ? '#00d2ff' : textMuted, fontWeight: item === 'Dashboard' ? '700' : '500', cursor: 'pointer' }}>{item}</div>
-            ))}
+            {[
+              { label: 'Dashboard', key: 'dashboard' },
+              { label: 'Markets', key: 'markets' },
+              { label: 'Portfolio', key: 'portfolio' },
+              { label: 'Settings', key: 'settings' }
+            ].map((item) => {
+              const active = activeTab === item.key;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(item.key);
+                    setSidebarOpen(false);
+                  }}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '0.7rem 0.8rem',
+                    borderRadius: '10px',
+                    background: active ? (isDark ? 'rgba(0,210,255,0.16)' : 'rgba(0,210,255,0.12)') : 'transparent',
+                    color: active ? '#00d2ff' : textMuted,
+                    fontWeight: active ? '700' : '500',
+                    border: 'none',
+                    textDecoration: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
           </div>
           <div style={{ marginTop: '1.2rem', padding: '0.8rem', borderRadius: '12px', background: isDark ? 'rgba(74,222,128,0.12)' : 'rgba(74,222,128,0.12)', border: `1px solid ${borderColor}` }}>
             <div style={{ fontSize: '0.8rem', color: textMuted }}>Trading Plan</div>
@@ -111,14 +157,27 @@ export default function Dashboard({ user, onLogout }) {
           </div>
         </aside>
 
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, display: activeTab === 'dashboard' ? 'block' : 'none' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem', flexDirection: isMobile ? 'column' : 'row' }}>
             <div>
               <p style={{ color: '#00d2ff', textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '0.8rem', margin: 0 }}>HEXA TRADING</p>
-              <h1 style={{ margin: '0.3rem 0', fontSize: '2rem', color: headerText }}>Welcome back, {user?.username || 'Trader'}</h1>
-              <p style={{ margin: 0, color: textMuted }}>{user?.email || 'Your account is ready for live trading.'}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <h1 style={{ margin: '0.3rem 0', fontSize: '2rem', color: headerText }}>Welcome back, {user?.username || 'Trader'}</h1>
+                {user?.isDemo && (
+                  <span style={{ padding: '0.35rem 0.75rem', borderRadius: '999px', background: '#075985', color: '#bfdbfe', fontSize: '0.85rem', fontWeight: '700' }}>Demo Account</span>
+                )}
+              </div>
+              <p style={{ margin: 0, color: textMuted }}>{user?.isDemo ? 'You are using a trial demo account.' : user?.email ? user.email : 'Your account is ready for live trading.'}</p>
             </div>
             <div style={{ display: 'flex', gap: '0.7rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              {isMobile && (
+                <button
+                  onClick={() => setSidebarOpen((open) => !open)}
+                  style={{ padding: '0.7rem 1rem', background: 'rgba(0,210,255,0.12)', border: `1px solid ${borderColor}`, color: '#00d2ff', borderRadius: '999px', cursor: 'pointer', fontWeight: '600' }}
+                >
+                  Menu
+                </button>
+              )}
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 style={{ padding: '0.7rem 1rem', background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.06)', border: `1px solid ${borderColor}`, color: headerText, borderRadius: '999px', cursor: 'pointer', fontWeight: '600' }}
@@ -310,7 +369,7 @@ export default function Dashboard({ user, onLogout }) {
                   <td style={{ padding: '0.8rem 0', fontWeight: '700' }}>{item.currency_pair}</td>
                   <td style={{ padding: '0.8rem 0', color: '#4ade80', fontWeight: '700' }}>{Number(item.rate).toFixed(4)}</td>
                   <td style={{ padding: '0.8rem 0', textAlign: 'right' }}>
-                    <button style={{ padding: '0.45rem 0.9rem', backgroundColor: '#00d2ff', border: 'none', borderRadius: '999px', color: '#07111d', fontWeight: '700', cursor: 'pointer' }}>Trade</button>
+                    <button style={{ padding: '0.45rem 0.9rem', backgroundColor: '#00d2ff', border: 'none', borderRadius: '999px', color: '#07111d', fontWeight: '700', cursor: 'pointer' }} onClick={() => setTradeModal({ open: true, type: 'Buy' })}>Trade</button>
                   </td>
                 </tr>
               ))}
@@ -388,6 +447,85 @@ export default function Dashboard({ user, onLogout }) {
             </div>
           </div>
         </div>
+        </div>
+
+        <div style={{ display: activeTab === 'markets' ? 'block' : 'none', padding: '1rem 0' }}>
+          <div style={{ ...cardStyle, background: cardBackground, border: `1px solid ${borderColor}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div>
+                <h3 style={{ margin: 0, color: '#00d2ff' }}>Market Overview</h3>
+                <p style={{ margin: '0.5rem 0 0', color: textMuted }}>Live market prices for your trading instruments.</p>
+              </div>
+              <button type="button" onClick={() => setActiveTab('dashboard')} style={{ background: 'transparent', border: '1px solid #00d2ff', color: '#00d2ff', padding: '0.5rem 0.9rem', borderRadius: '999px', cursor: 'pointer' }}>Dashboard</button>
+            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid #334155', color: textMuted }}>
+                  <th style={{ padding: '0.75rem 0', textAlign: 'left' }}>Instrument</th>
+                  <th style={{ padding: '0.75rem 0', textAlign: 'left' }}>Price</th>
+                  <th style={{ padding: '0.75rem 0', textAlign: 'left' }}>Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ticker.map((item) => (
+                  <tr key={item.symbol} style={{ borderBottom: '1px solid #1e293b' }}>
+                    <td style={{ padding: '0.75rem 0', color: '#fff', fontWeight: '600' }}>{item.symbol}</td>
+                    <td style={{ padding: '0.75rem 0', color: '#cbd5e1' }}>{item.value}</td>
+                    <td style={{ padding: '0.75rem 0', color: item.change.startsWith('+') ? '#4ade80' : '#f87171', fontWeight: '700' }}>{item.change}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style={{ display: activeTab === 'portfolio' ? 'block' : 'none', padding: '1rem 0' }}>
+          <div style={{ ...cardStyle, background: cardBackground, border: `1px solid ${borderColor}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div>
+                <h3 style={{ margin: 0, color: '#00d2ff' }}>Portfolio</h3>
+                <p style={{ margin: '0.5rem 0 0', color: textMuted }}>Your current positions and account summary.</p>
+              </div>
+              <button type="button" onClick={() => setActiveTab('dashboard')} style={{ background: 'transparent', border: '1px solid #00d2ff', color: '#00d2ff', padding: '0.5rem 0.9rem', borderRadius: '999px', cursor: 'pointer' }}>Dashboard</button>
+            </div>
+            <div style={{ display: 'grid', gap: '0.75rem' }}>
+              {portfolio.map((position) => (
+                <div key={position.symbol} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.85rem', borderRadius: '12px', background: isDark ? '#020617' : '#f8fafc', border: `1px solid ${borderColor}` }}>
+                  <div>
+                    <div style={{ color: '#fff', fontWeight: '700' }}>{position.symbol}</div>
+                    <div style={{ color: textMuted, fontSize: '0.85rem' }}>{position.side}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: '#cbd5e1', marginBottom: '0.35rem' }}>{position.size}</div>
+                    <div style={{ color: position.pnl.startsWith('+') ? '#4ade80' : '#f87171', fontWeight: '700' }}>{position.pnl}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: activeTab === 'settings' ? 'block' : 'none', padding: '1rem 0' }}>
+          <div style={{ ...cardStyle, background: cardBackground, border: `1px solid ${borderColor}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div>
+                <h3 style={{ margin: 0, color: '#00d2ff' }}>Settings</h3>
+                <p style={{ margin: '0.5rem 0 0', color: textMuted }}>Manage your preferences and account security.</p>
+              </div>
+              <button type="button" onClick={() => setActiveTab('dashboard')} style={{ background: 'transparent', border: '1px solid #00d2ff', color: '#00d2ff', padding: '0.5rem 0.9rem', borderRadius: '999px', cursor: 'pointer' }}>Dashboard</button>
+            </div>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              <div style={{ padding: '1rem', borderRadius: '16px', background: isDark ? '#020617' : '#f8fafc', border: `1px solid ${borderColor}` }}>
+                <div style={{ fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Update Password</div>
+                <div style={{ color: textMuted, marginBottom: '0.75rem' }}>Change your password and improve account security.</div>
+                <button type="button" onClick={() => navigate('/update-password')} style={{ padding: '0.75rem 1rem', borderRadius: '999px', background: '#4ade80', border: 'none', color: '#052e16', fontWeight: '700', cursor: 'pointer' }}>Update Password</button>
+              </div>
+              <div style={{ padding: '1rem', borderRadius: '16px', background: isDark ? '#020617' : '#f8fafc', border: `1px solid ${borderColor}` }}>
+                <div style={{ fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Notifications</div>
+                <div style={{ color: textMuted }}>Notifications, alerts and email preferences will be available here.</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {orderMessage && (

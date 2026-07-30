@@ -27,7 +27,7 @@ export default function Support({ user }) {
             <div key={topic.title} style={{ background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(148, 163, 184, 0.2)', borderRadius: '18px', padding: '1.2rem' }}>
               <h3 style={{ color: '#fff', marginTop: 0 }}>{topic.title}</h3>
               <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>{topic.description}</p>
-              <button type="button" style={{ padding: '0.75rem 0.95rem', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #00d2ff, #4ade80)', color: '#04111d', fontWeight: '700', cursor: 'pointer' }}>Contact Us</button>
+              <button type="button" onClick={() => window.location.href = 'mailto:support@hexa-trading.com'} style={{ padding: '0.75rem 0.95rem', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #00d2ff, #4ade80)', color: '#04111d', fontWeight: '700', cursor: 'pointer' }}>Contact Us</button>
             </div>
           ))}
         </div>

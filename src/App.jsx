@@ -72,11 +72,11 @@ function App() {
     <BrowserRouter>
       <Navbar user={user} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Home user={user} />} />
-        <Route path="/platforms" element={user ? <Navigate to="/dashboard" /> : <Platforms />} />
-        <Route path="/trading" element={user ? <Navigate to="/dashboard" /> : <Trading />} />
-        <Route path="/funding" element={user ? <Navigate to="/dashboard" /> : <Funding />} />
-        <Route path="/about" element={user ? <Navigate to="/dashboard" /> : <About />} />
+        <Route path="/" element={<Home user={user} />} />
+        <Route path="/platforms" element={<Platforms />} />
+        <Route path="/trading" element={<Trading />} />
+        <Route path="/funding" element={<Funding />} />
+        <Route path="/about" element={<About />} />
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />} />
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         <Route path="/forgot-password" element={user ? <Navigate to="/dashboard" /> : <ForgotPassword />} />
@@ -91,6 +91,7 @@ function App() {
         <Route path="/support" element={user ? <Support user={user} /> : <Navigate to="/login" />} />
         <Route path="/notifications" element={user ? <Notifications user={user} /> : <Navigate to="/login" />} />
         <Route path="/footer" element={<Footer />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
     </BrowserRouter>

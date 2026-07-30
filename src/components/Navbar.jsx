@@ -51,9 +51,6 @@ export default function Navbar({ user, onLogout }) {
         {user ? (
           <>
             <Link to="/dashboard" className="btn">Dashboard</Link>
-            <Link to="/markets" className="login">Markets</Link>
-            <Link to="/portfolio" className="login">Portfolio</Link>
-            <Link to="/settings" className="login">Settings</Link>
             <Link to="/profile" className="login">Profile</Link>
             <button type="button" onClick={onLogout} className="login">Logout</button>
           </>
